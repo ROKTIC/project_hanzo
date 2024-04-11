@@ -31,6 +31,7 @@ body {
 }
 
 header {
+  width: 100%;
   height: 30vh;
   /*background-color: #282828;*/
   background-image: url(/img/banner.png);
@@ -209,12 +210,6 @@ main .item-wrapper ul .item {
   /*border : 1px solid black;*/
   color : #000000;
   display: block;
-  text-decoration: none;
-
-}
-
-main .item-wrapper ul .item a{
-
 
 }
 

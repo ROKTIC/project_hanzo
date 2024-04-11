@@ -1,0 +1,142 @@
+* {
+    text-align: center;
+    list-style: none;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.banner {
+    width: 100%;
+    height: 30vh;
+    /*background-color: #282828;*/
+    background-image: url(/img/bannerimg.png);
+    background-repeat: round;
+    opacity: 82%;
+    padding: 0;
+}
+
+.container{
+    width: 100%;
+    /*border: 2px solid #000000;*/
+    background-color: #f9f7f9;
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+}
+.title{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.title > h1{
+    width: 700px;
+    height: 80px;
+    border: 3px solid #d9d9da;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blog-left{
+    display: inline-flex;
+    width: 100%;
+    float: left;
+    flex-direction: column;
+    align-items: center;
+}
+
+.blog-profile{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin-left: -608px;
+}
+
+.blog-profile_text{
+    font-size: 15px;
+    line-height: 0;
+}
+
+.blog-title{
+    margin-left: 15px;
+}
+
+.blog-content{
+    height: 600px;
+    width: 700px;
+    border: 3px solid #d9d9da;
+}
+
+.blog-share{
+    margin-left: 15px;
+}
+/*.blog-share-reply{*/
+/*    width: 500px;*/
+/*    height: 400px;*/
+/*    border: 3px solid #d9d9da;*/
+/*}*/
+
+.reply-table{
+    display: flex;
+    flex-direction: column;
+    width: 700px;
+    height: 400px;
+    border: 3px solid;
+}
+.reply-table > div{
+    display: flex;
+}
+.reply-id{
+    width: 60px;
+}
+.reply-text{
+    width: 100%;
+}
+.reply-table > span{
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.reply-add {
+    height: 50px;
+    display: flex;
+}
+.reply-input{
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    text-align: left;
+}
+.reply-btn{
+    width: 40px;
+}
+.footer {
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
+
+.footer .footer-corpname {
+    font-size: 100px;
+    color: #000000;
+    margin: 14px 3rem;
+    text-align: left;
+}
+
+.footer .footer-team-members {
+    color: #545e6f;
+    padding: 1px;
+    margin-bottom: 10px;
+}
+
+.footer .footer-copyright {
+    color: #545e6f;
+    padding: 1px;
+    margin-bottom: 10px;
+}
