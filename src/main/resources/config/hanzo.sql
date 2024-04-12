@@ -342,3 +342,9 @@ INSERT INTO ORDERS(order_num, receiver_name, receiver_pnum, receiver_address, re
 VALUES (order_seq.nextval, '김조한', '03030', '이젠시 이젠구 이젠동', '이젠아파트 3동 3호', '010-3333-4444', '부재시 문앞에 놓고 가세요', sysdate, 620000, 'hanzo3');
 
 COMMIT;
+
+SELECT it.cate_num, it.item_num, it.item_name, it.item_price, it.item_info, it.item_thumb, it.item_img, li.list_size
+FROM ITEM it
+FULL OUTER JOIN ORDER_LIST li
+ON it.item_num = li.item_num
+WHERE it.cate_num=? and it.item_num=?

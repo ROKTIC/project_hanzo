@@ -36,7 +36,7 @@
     <!-- nav start -->
 
     <div id="mid_info_div">
-        <h3 id="mid_info">Product Info 제품상세</h3>
+        <h2 id="mid_info">Product Info 제품상세</h2>
 
         <div id="img_div" style="background-image:url(..${item.itemThumb}); width: 300px; height: 300px;"></div>
 <%--        <div>${item.itemCategory}</div>--%>
@@ -44,6 +44,23 @@
         <div>${item.itemName}</div>
         <div>${item.price}</div>
         <div>${item.itemInfo}</div>
+        <div>
+            <select>
+                <option>240</option>
+                <option>245</option>
+                <option>250</option>
+                <option>255</option>
+                <option>260</option>
+                <option>265</option>
+                <option>270</option>
+                <option>275</option>
+                <option>280</option>
+                <option>285</option>
+                <option>290</option>
+                <option>295</option>
+                <option>300</option>
+            </select>
+        </div>
 
     </div>
 

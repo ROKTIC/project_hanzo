@@ -22,11 +22,6 @@ a {
   margin-bottom: 5%;
 }
 
-/* 제품 설명 div */
-#mid_info_div {
-  text-align: center;
-}
-
 /* 제품 설명 밑줄 효과 */
 #mid_info::after {
   content: "";

@@ -2,6 +2,7 @@ package com.ezen.index.dao;
 
 import com.ezen.index.dto.Category;
 import com.ezen.index.dto.Item;
+import com.ezen.index.dto.OrderList;
 import com.ezen.mall.domain.common.database.ConnectionFactory;
 
 import java.sql.Connection;
@@ -162,12 +163,14 @@ public class JdbcItemDao implements ItemDao {
      */
     public Item itemDetail(int categoryNumber, int itemNumber) throws SQLException {
         StringBuilder sql = new StringBuilder();
-        Item item = null;
-        item = new Item();
+        Item item = new Item();
+        OrderList orderList = new OrderList();
 
-        sql.append(" SELECT cate_num, item_num, item_name, item_price, item_info, item_thumb, item_img")
-                .append(" FROM ITEM")
-                .append(" WHERE cate_num=? and item_num=?");
+        sql.append(" SELECT it.cate_num, it.item_num, it.item_name, it.item_price, it.item_info, it.item_thumb, it.item_img, li.list_size")
+                .append(" FROM ITEM it")
+                .append(" FULL OUTER JOIN ORDER_LIST li")
+                .append(" ON it.item_num = li.item_num")
+                .append(" WHERE it.cate_num=? and it.item_num=?");
 
         Connection conn = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
@@ -185,6 +188,7 @@ public class JdbcItemDao implements ItemDao {
                 item.setItemInfo(rs.getString("item_info"));
                 item.setItemThumb(rs.getString("item_thumb"));
                 item.setItemImage(rs.getString("item_img"));
+                orderList.setListSize(rs.getInt("list_size"));
             }
         } finally {
             try {
