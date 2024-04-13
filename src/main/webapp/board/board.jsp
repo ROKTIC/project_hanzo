@@ -32,7 +32,6 @@
     List<Article> list = boardService.articleList(rowCount, boardNum, requestPage, searchType, searchValue);
     request.setAttribute("list", list);
 
-
     int tableRowCount = boardService.getArticleCount(boardNum, searchType, searchValue);
     PageParams params = new PageParams(rowCount, pageSize, requestPage, tableRowCount);
     Pagination pagination = new Pagination(params);
@@ -47,7 +46,7 @@
         ac.setArticleTitle(writeTitle);
         ac.setArticleContent(writeContent);
         ac.setHitcount(0);
-        ac.setUserId("hanzo1");
+        ac.setUserId(ac.getUserId());
         ac.setBoardNum(boardNum);
         jdao.createArticle(ac);
     }
@@ -126,7 +125,7 @@
                             <tr>
                                 <td>${pagination.params.rowCount - ( (pagination.params.requestPage-1)* pagination.params.elementSize)-loop.index}</td>
                                 <td>
-                                    <a href="read.jsp?boardNum=${article.boardNum}&articleNum=${article.articleNum}">${article.articleTitle}</a>
+                                    <a href="read.jsp?boardNum=${article.boardNum}&articleNum=${article.articleNum}">${article.articleTitle}(${article.countReply})</a>
                                 </td>
                                 <td>${article.userId}</td>
                                 <td>${article.articleDate}</td>

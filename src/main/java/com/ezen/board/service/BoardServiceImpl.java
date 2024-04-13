@@ -49,6 +49,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public int getReplyCount(int articleNum) {
+        int count = 0;
+        try {
+            count = articleDao.findByReplyCount(articleNum);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
+
+    @Override
     public Article getReadArticle(int articleNum, int boardNum) {
         Article article = null;
         try {

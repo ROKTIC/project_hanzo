@@ -8,10 +8,11 @@ public class Article {
     private int hitcount;
     private String userId;
     private int boardNum;
+    private int countReply;
 
     public Article(){}
 
-    public Article(int articleNum, String articleTitle, String articleContent, String regdate, int hitcount, String userId, int boardNum) {
+    public Article(int articleNum, String articleTitle, String articleContent, String regdate, int hitcount, String userId, int boardNum, int countReply) {
         this.articleNum = articleNum;
         this.articleTitle = articleTitle;
         this.articleContent = articleContent;
@@ -19,6 +20,7 @@ public class Article {
         this.hitcount = hitcount;
         this.userId = userId;
         this.boardNum = boardNum;
+        this.countReply = countReply;
     }
 
     public int getArticleNum() {
@@ -77,6 +79,14 @@ public class Article {
         this.boardNum = boardNum;
     }
 
+    public int getCountReply() {
+        return countReply;
+    }
+
+    public void setCountReply(int count) {
+        this.countReply = count;
+    }
+
     @Override
     public String toString() {
         return "Article{" +
@@ -87,6 +97,7 @@ public class Article {
                 ", hitcount=" + hitcount +
                 ", userId='" + userId + '\'' +
                 ", boardNum=" + boardNum +
+                ", countReply=" + countReply +
                 '}';
     }
 }

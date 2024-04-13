@@ -12,7 +12,6 @@
 <%--    <c:set scope="request" var="message" value="게시판 글읽기는 회원만 가능합니다!"/>--%>
 <%--    <jsp:forward page="/member/login.jsp"/>--%>
 <%--</c:if>--%>
-
 <%
     String articleNum = request.getParameter("articleNum");
     String boardNum = request.getParameter("boardNum");
@@ -26,20 +25,21 @@
     JdbcArticleDao jdao = new JdbcArticleDao();
     ArticleComment ac = new ArticleComment();
 
-    List<ArticleComment> acList = jdao.commentListAll();
+    int an = jdao.findByReplyCount(Integer.parseInt(articleNum));
+    List<ArticleComment> acList = jdao.commentListAll(articleNum);
     if(acList.size() != 0){
-            System.out.println(acList.get(1));
+//            System.out.println(acList.get(1));
     }
     else{
-        System.out.println("11233");
+//        System.out.println("11233");
     }
 
     pageContext.setAttribute("acList", acList);
-    ac.setCommentContent(articleCommentContent); // 삭제
-    ac.setUserId("hanzo1"); // 삭제
-    ac.setArticleNum(2); // 삭제
-    ac.setCommentNum(1); // 삭제
-    ac.setCommentDate("202404-13"); // 삭제
+    ac.setCommentContent(articleCommentContent); // 건들필요 없음
+    ac.setUserId("hanzo1"); //  로그인 관련 대체 해야 할 부분
+    ac.setArticleNum(Integer.parseInt(articleNum)); // 건들필요 없음
+    ac.setCommentNum(1); // 나중에 seq 만들어서 대체 해야할 부분
+    ac.setCommentDate("202404-13"); //  sysdate 로 대체 해야할 부분
     if(articleCommentContent != null){
         jdao.createReply(ac);
     }
@@ -80,7 +80,7 @@
                         <p>${article.articleContent}</p>
                     </div>
                     <div class="blog-share-reply">
-                        <p>댓글(?)</p>
+                        <p>댓글(<%=an%>)</p>
                     </div>
                     <div class="reply-table">
                         <c:if test="${not empty acList}">

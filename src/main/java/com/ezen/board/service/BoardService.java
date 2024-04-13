@@ -35,6 +35,13 @@ public interface BoardService {
     public int getArticleCount(int boardNum, String type, String value);
 
     /**
+     * 댓글 갯수 반환
+     * @param articleNum
+     * @return
+     */
+    public int getReplyCount(int articleNum);
+
+    /**
      *
      * @param articleNum 상세보기 하려는 게시글 번호
      * @return 게시글 내용

@@ -18,7 +18,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시판 전체
-     *
      * @return
      * @throws SQLException
      */
@@ -90,7 +89,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시글 전체 목록 반환
-     *
      * @param rowCount    테이블당 보여지는 행의 갯수
      * @param requestPage 사용자 요청 페이지
      * @param type        검색 유형
@@ -98,6 +96,7 @@ public class JdbcArticleDao implements ArticleDao {
      * @return 검색 목록
      * @throws SQLException
      */
+    //ctrl + shift + u
     public List<Article> findByAll(int rowCount, int boardNum, int requestPage, String type, String value) throws SQLException {
         List<Article> list = new ArrayList<>();
         if (type != null && type.equals("")) {
@@ -105,16 +104,17 @@ public class JdbcArticleDao implements ArticleDao {
         }
         StringBuilder sql = new StringBuilder();
 
-        sql.append(" SELECT board_num, article_num, article_title, user_id, article_date, hitcount")
-                .append(" FROM (SELECT board_num, article_num, CEIL(rownum / ?) request_page, article_title, user_id, TO_CHAR(article_date, 'YYYY-MM-DD HH24:MI') article_date, hitcount")
-                .append(" FROM (SELECT board_num, article_num, ARTICLE_TITLE, USER_ID, ARTICLE_DATE, HITCOUNT")
-                .append("       FROM article")
-                .append("       WHERE board_num = ?");
+        sql.append(" SELECT B.board_num, B.article_num, B.article_title, B.user_id, B.article_date, B.hitcount")
+           .append("       ,(SELECT COUNT(*) FROM article_comment A WHERE A.ARTICLE_NUM = B.article_num) countReply")
+           .append(" FROM (SELECT board_num, article_num, CEIL(rownum / ?) request_page, article_title, user_id, TO_CHAR(article_date, 'YYYY-MM-DD HH24:MI') article_date, hitcount")
+           .append(" FROM (SELECT board_num, article_num, article_title, user_id, article_date, hitcount")
+           .append("       FROM article")
+           .append("       WHERE board_num = ?");
         if (type != null) {
             switch (type) {
                 case "t": // 제목 검색
                     value = "%" + value + "%";
-                    sql.append("      AND ARTICLE_TITLE LIKE ?");
+                    sql.append("      and article_title like ?");
                     break;
                 case "w": // 작성자 검색
                     sql.append("      AND USER_ID = ?");
@@ -122,7 +122,7 @@ public class JdbcArticleDao implements ArticleDao {
             }
         }
         sql.append(" ORDER BY article_num desc")
-           .append(" ))")
+           .append(" ))B")
            .append(" WHERE request_page = ?");
         Connection con = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
@@ -153,8 +153,8 @@ public class JdbcArticleDao implements ArticleDao {
                 article.setUserId(rs.getString("user_id"));
                 article.setArticleDate(rs.getString("article_date"));
                 article.setHitcount(rs.getInt("hitcount"));
+                article.setCountReply(rs.getInt("countReply"));
                 list.add(article);
-                System.out.println(article.toString());
             }
         } finally {
             try {
@@ -199,7 +199,6 @@ public class JdbcArticleDao implements ArticleDao {
                     break;
             }
         }
-//        sql.append(" WHERE request_page = ?");
         Connection con = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -244,7 +243,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 검색
-     *
      * @param type
      * @param value
      * @return
@@ -382,18 +380,18 @@ public class JdbcArticleDao implements ArticleDao {
      * @throws SQLException
      */
     @Override
-    public List<ArticleComment> commentListAll() throws SQLException {
+    public List<ArticleComment> commentListAll(String articleNum) throws SQLException {
         StringBuilder sql = new StringBuilder();
         sql.append(" SELECT comment_num, comment_content, comment_date, article_num, user_id")
-                .append(" FROM ARTICLE_COMMENT");
-//                .append(" Where article_num = ?");
+                .append(" FROM ARTICLE_COMMENT")
+                .append(" Where article_num = ?");
         Connection con = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         List<ArticleComment> acList = new ArrayList<>();
         try {
             pstmt = con.prepareStatement(sql.toString());
-//            pstmt.setInt(1, articleNum);
+            pstmt.setInt(1, Integer.parseInt(articleNum));
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 ArticleComment articleComment = new ArticleComment();
@@ -413,6 +411,40 @@ public class JdbcArticleDao implements ArticleDao {
             }
         }
         return acList;
+    }
+
+    /**
+     * 각 게시글마다 달린 댓글 수 출력
+     * @param articleNum
+     * @return
+     * @throws SQLException
+     */
+    public int findByReplyCount(int articleNum) throws SQLException {
+        int count = 0;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT count(*) count")
+                .append(" FROM article_comment")
+                .append(" WHERE article_num = ?");
+        Connection con = connectionFactory.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = con.prepareStatement(sql.toString());
+            pstmt.setInt(1, articleNum);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("count");
+            }
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return count;
     }
 
     /**

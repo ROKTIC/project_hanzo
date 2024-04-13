@@ -20,7 +20,9 @@ public interface ArticleDao {
 
     public void updateArticleHitCount(int boardNum, int articleNum) throws SQLException;
 
-    public List<ArticleComment> commentListAll() throws SQLException;
+    public List<ArticleComment> commentListAll(String articleNum) throws SQLException;
+
+    public int findByReplyCount(int articleNum) throws SQLException;
 
     public List<Article> findByArticle(int rowCount, int boardNum, int requestPage, String type, String value) throws SQLException;
 }
