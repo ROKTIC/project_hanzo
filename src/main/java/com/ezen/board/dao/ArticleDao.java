@@ -18,8 +18,6 @@ public interface ArticleDao {
 
     public Article readArticle(int boardNum, int articleNum) throws SQLException;
 
-//    public void createReply(Article article) throws SQLException;
-
     public void updateArticleHitCount(int boardNum, int articleNum) throws SQLException;
 
     public List<ArticleComment> commentListAll() throws SQLException;

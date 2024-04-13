@@ -31,25 +31,40 @@
         <div class="page-title">
             <div class="container">
                 <div class="title">
-                    <h1><input type="" class="form-control" name="article_title"></h1>
+                    <h3></h3>
                 </div>
-                <div class="blog-profile">
-                    <div class="blog-profile_text" readonly>
-<%--                        <h4>${loginmember.id}</h4>--%>
+                <form action="write-action.jsp">
+                    <div class="blog-profile">
+                        <div class="blog-profile_text" readonly>
+                            <%--                        <h4>${loginmember.id}</h4>--%>
+                        </div>
                     </div>
-                </div>
-                <div class="blog-left">
-                    <div class="blog-content">
-                        <textarea class="writetext" name="article_content"></textarea>
+                    <div class="blog-left">
+                        <div class="blog-content">
+                            <textarea class="writetext" name="article_content"></textarea>
+                        </div>
                     </div>
+                </form>
+                <div class="write-add">
+                    <input class="write-title"></input>
+                    <input class="write-content"></input>
+                    <button class="write-btn">작성</button>
                 </div>
             </div>
         </div>
-
     </section>
 </div>
 <%-- footer start --%>
 <jsp:include page="/module/footer.jsp"/>
 <%-- footer end --%>
+<script>
+    let writeBtn = document.querySelector('.write-btn');
+    console.log(writeBtn)
+    writeBtn.addEventListener('click', function () {
+        let writeTitle = document.querySelector('.write-title');
+        let writeContent = document.querySelector('.write-content');
+        window.location.href = "board.jsp?writeTitle=" + writeTitle.value + "&writeContent=" + writeContent.value;
+    })
+</script>
 </body>
 </html>

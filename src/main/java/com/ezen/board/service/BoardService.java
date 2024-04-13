@@ -23,12 +23,6 @@ public interface BoardService {
     public void writeArticle(Article article);
 
     /**
-     * 게시글 댓글 쓰기
-     * @param article 댓글을 쓰고자하는 게시글
-     */
-//    public void replyArticle(Article article);
-
-    /**
      * 게시글 목록 반환
      * @param
      */
@@ -41,7 +35,6 @@ public interface BoardService {
     public int getArticleCount(int boardNum, String type, String value);
 
     /**
-     * 게시글 상세보기
      *
      * @param articleNum 상세보기 하려는 게시글 번호
      * @return 게시글 내용

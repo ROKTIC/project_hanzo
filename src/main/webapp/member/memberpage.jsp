@@ -1,4 +1,8 @@
+<%@ page import="com.ezen.member.dto.Order" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- 마이페이지 --%>
+
+<jsp:useBean id="loginMember" class="com.ezen.member.dto.Member" scope="session"/>
 
 
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -75,19 +79,26 @@
 
             <div class="container text-center">
                 <div id="mypage-main" class="row">
-                    <div class="mypage-image" style="border: 1px solid black"><a href="memberinfo.jsp">이미지</a><br>  <%-- 이미지 구역 구분 위해서 border 지정 해놓음 --%>
+<%--                    <div class="mypage-image" style="border: 1px solid black"><a href="memberinfo.jsp">이미지</a><br>  &lt;%&ndash; 이미지 구역 구분 위해서 border 지정 해놓음 &ndash;%&gt;--%>
 
-                    </div>
-                    <div>
+<%--                    </div>--%>
+                    <a href="memberinfo.jsp">
+                    <div id="member-info">
                         <br>
-                        안녕하세요 **님 <br>
                         <br>
-                        고객님의 회원등급은 <strong>다이아몬드</strong>입니다.
+                        <br>
+                        안녕하세요 ${loginMember.name}님 <br>
+                        <br>
+                        고객님의 회원등급은 <strong style="color: #7abaff">다이아몬드</strong>입니다.
                     </div>
-                    <div class="col-8 border">
+                    </a>
+
+                    <div class="col-8 border" >
                         주문완료 상품 ? 건</div>
+
                 </div>
             </div>
+
 
             <div style="margin: 40px auto; border-bottom: 7px solid #48372f; width: 500px" class="container-fluid">
                 <h3 style="text-align: center; " class="mt-4"> 주문 리스트 </h3>
@@ -106,23 +117,17 @@
                 </thead>
 
                 <tbody>
+
+                <c:forEach var="order" items="${loginMember.orders}">
                 <tr>
-                    <th scope="row">2020/04/04</th>
-                    <td>상품블라블라</td>
-                    <td>매우 비싼 가격</td>
-                    <td>000000</td>
+
+                    <th scope="row">${order.orderDate}</th>
+                    <td>${order.itemName}</td>
+                    <td>${order.totalPrice}</td>
+                    <td>${order.orderNum}</td>
                 </tr>
-                <tr>
-                    <th scope="row">2020/04/04</th>
-                    <td>상품블라블라2</td>
-                    <td>매우 비싼 가격</td>
-                    <td>000000</td>
-                <tr>
-                    <th scope="row">2020/04/04</th>
-                    <td>상품블라블라3</td>
-                    <td>매우 비싼 가격</td>
-                    <td>000000</td>
-                </tr>
+                </c:forEach>
+
                 </tbody>
             </table>
     </div>

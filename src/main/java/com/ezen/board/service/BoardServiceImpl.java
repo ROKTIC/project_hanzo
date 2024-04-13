@@ -10,7 +10,6 @@ import java.util.List;
 
 public class BoardServiceImpl implements BoardService {
     ArticleDao articleDao = new JdbcArticleDao();
-
     @Override
     public List<Board> boardList() {
         try {
@@ -60,14 +59,4 @@ public class BoardServiceImpl implements BoardService {
         }
         return article;
     }
-
-//    @Override
-//    public void replyArticle(Article article) {
-//        try {
-//            articleDao.createReply(article);
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }

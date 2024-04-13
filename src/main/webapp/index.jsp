@@ -1,18 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="com.ezen.index.service.ItemService" %>
-<%@ page import="com.ezen.index.service.ItemServiceImpl" %>
-<%@ page import="com.ezen.index.dto.Item" %>
-<%@ page import="java.util.List" %><%--
+<%--
     인덱스 페이지
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<%
-    ItemService itemService = new ItemServiceImpl();
-    List<Item> list = itemService.itemList();
-    request.setAttribute("list", list);
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -105,18 +95,51 @@
                     </div>
                 </form>
                 <ul>
-                    <%--     li를 반복하면서 전체 상품 리스트를 출력  --%>
-                    <c:forEach var="item" items="${list}" varStatus="loop">
-                        <c:set var="no" scope="request"></c:set>
-                        <li id="" class="item" name="item-1">
-                            <a href="../item_detail/item_detail.jsp?${item.itemNumber}">  <%-- 각 상품마다 item number 지정 --%>
-                                <div class="item-photo" name="">${item.itemImage}</div>
-                                <div class="item-title" name="">${item.itemName}</div>
-                                <div class="item-price" name="">${item.price}</div>
-                            </a>
-                        </li>
-                    </c:forEach>
+                    <li id="" class="item" name="item-1">
+                        <div class="item-photo" name=""></div>
+                        <div class="item-title" name="">신상 더비</div>
+                        <div class="item-price" name="">69,000</div>
+                    </li>
+                    <li id="" class="item" name="item-2">
+                        <div class="item-photo" name=""></div>
+                        <div class="item-title" name="">신상 더비</div>
+                        <div class="item-price" name="">69,000</div>
+                    </li>
+                    <li id="" class="item" name="item-3">
+                        <div class="item-photo" name=""></div>
+                        <div class="item-title" name="">신상 더비</div>
+                        <div class="item-price" name="">69,000</div>
+                    </li>
+                    <li id="" class="item" name="item-4">
+                        <div class="item-photo" name=""></div>
+                        <div class="item-title" name="">신상 더비</div>
+                        <div class="item-price" name="">69,000</div>
+                    </li>
+                    <li id="" class="item" name="item-5">
+                        <div class="item-photo" name=""></div>
+                        <div class="item-title" name="">신상 더비</div>
+                        <div class="item-price" name="">69,000</div>
+                    </li>
+                    <li id="" class="item" name="item-6">
+                        <div class="item-photo" name=""></div>
+                        <div class="item-title" name="">신상 더비</div>
+                        <div class="item-price" name="">69,000</div>
+                    </li>
+                    <li id="" class="item" name="item-6">
+                        <div class="item-photo" name="" style="background-image: url(img/derby4.png)"></div>
+                        <div class="item-title" name="">신상 로퍼</div>
+                        <div class="item-price" name="">89,000</div>
+                    </li>
+                    <li id="" class="item" name="item-7">
 
+                    </li>
+                    <li id="" class="item" name="item-8">
+
+                    </li>
+
+                    <li id="" class="item" name="item-9">
+
+                    </li>
                 </ul>
             </div>
         </main>

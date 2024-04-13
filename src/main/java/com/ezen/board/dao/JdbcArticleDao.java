@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class JdbcArticleDao implements ArticleDao {
@@ -17,7 +18,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시판 전체
-     *
      * @return
      * @throws SQLException
      */
@@ -58,7 +58,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시글 쓰기
-     *
      * @param article
      * @throws SQLException
      */
@@ -66,17 +65,16 @@ public class JdbcArticleDao implements ArticleDao {
     public void createArticle(Article article) throws SQLException {
         StringBuilder sql = new StringBuilder();
         sql.append(" INSERT INTO article(article_num, article_title, article_content, article_date, hitcount, user_id, board_num)")
-                .append(" VALUES(article_seq.nextval, ?, ?, TO_CHAR(article_date, 'YYYY-MM-DD') article_date, ?, ?, ?, ?)");
+                .append(" VALUES(article_seq.nextval, ?, ?, sysdate, ?, ?, ?)");
         Connection con = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(sql.toString());
             pstmt.setString(1, article.getArticleTitle());
             pstmt.setString(2, article.getArticleContent());
-            pstmt.setString(3, article.getArticleDate());
-            pstmt.setInt(4, article.getHitcount());
-            pstmt.setString(5, article.getUserId());
-            pstmt.setInt(6, article.getBoardNum());
+            pstmt.setInt(3, article.getHitcount());
+            pstmt.setString(4, article.getUserId());
+            pstmt.setInt(5, article.getBoardNum());
             pstmt.executeUpdate();
         } finally {
             try {
@@ -90,7 +88,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시글 전체 목록 반환
-     *
      * @param rowCount    테이블당 보여지는 행의 갯수
      * @param requestPage 사용자 요청 페이지
      * @param type        검색 유형
@@ -117,12 +114,13 @@ public class JdbcArticleDao implements ArticleDao {
                     sql.append("      AND ARTICLE_TITLE LIKE ?");
                     break;
                 case "w": // 작성자 검색
+                    value = "%" + value + "%";
                     sql.append("      AND USER_ID = ?");
                     break;
             }
         }
         sql.append(" ))")
-                .append(" WHERE request_page = ?");
+           .append(" WHERE request_page = ?");
         Connection con = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -140,11 +138,6 @@ public class JdbcArticleDao implements ArticleDao {
                         pstmt.setInt(3, requestPage);
                         pstmt.setString(4, value);
                         break;
-                    case "tw":
-                        pstmt.setInt(3, requestPage);
-                        pstmt.setString(4, value);
-                        pstmt.setString(5, value);
-                        break;
                 }
             }
             rs = pstmt.executeQuery();
@@ -157,6 +150,7 @@ public class JdbcArticleDao implements ArticleDao {
                 article.setArticleDate(rs.getString("article_date"));
                 article.setHitcount(rs.getInt("hitcount"));
                 list.add(article);
+                System.out.println(article.toString());
             }
         } finally {
             try {
@@ -172,7 +166,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 검색
-     *
      * @param type
      * @param value
      * @return
@@ -185,7 +178,6 @@ public class JdbcArticleDao implements ArticleDao {
         sql.append(" SELECT count(*) count")
                 .append(" FROM article")
                 .append(" WHERE board_num = ?");
-
         if (type != null) {
             switch (type) {
                 case "t": // 제목 검색
@@ -194,10 +186,6 @@ public class JdbcArticleDao implements ArticleDao {
                     break;
                 case "w": // 작성자 검색
                     sql.append(" AND user_id LIKE ?");
-                    break;
-                case "tw": // 제목과 작성자 검색
-                    value = "%" + value + "%";
-                    sql.append(" AND article_title LIKE ? OR user_id LIKE ?");
                     break;
             }
         }
@@ -211,11 +199,9 @@ public class JdbcArticleDao implements ArticleDao {
 //                조건 검색
                 switch (type) {
                     case "t":
-                    case "w":
                         pstmt.setString(2, value);
                         break;
-                    case "tw":
-                        pstmt.setString(2, value);
+                    case "w":
                         pstmt.setString(3, value);
                         break;
                 }
@@ -238,7 +224,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시글 읽기
-     *
      * @param articleNum
      * @param boardNum
      * @return
@@ -282,7 +267,6 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 조회수 증가
-     *
      * @param articleNum
      * @param boardNum
      * @throws SQLException
@@ -375,7 +359,7 @@ public class JdbcArticleDao implements ArticleDao {
     }
 
     public static void main(String[] args) throws SQLException {
-        JdbcArticleDao jdbcArticleDao = new JdbcArticleDao();
+//        JdbcArticleDao jdbcArticleDao = new JdbcArticleDao();
 //        List<Article> test = jdbcArticleDao.findBydAll(10,1,null,null);
 //        System.out.println(test);
 //        int count = jdbcArticleDao.findByArticleCount(10, null, null);
