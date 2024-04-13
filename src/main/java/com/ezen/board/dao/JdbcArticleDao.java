@@ -1,6 +1,7 @@
 package com.ezen.board.dao;
 
 import com.ezen.board.dto.Article;
+import com.ezen.board.dto.ArticleComment;
 import com.ezen.board.dto.Board;
 import com.ezen.mall.domain.common.database.ConnectionFactory;
 
@@ -16,6 +17,7 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시판 전체
+     *
      * @return
      * @throws SQLException
      */
@@ -56,6 +58,7 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시글 쓰기
+     *
      * @param article
      * @throws SQLException
      */
@@ -87,6 +90,7 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시글 전체 목록 반환
+     *
      * @param rowCount    테이블당 보여지는 행의 갯수
      * @param requestPage 사용자 요청 페이지
      * @param type        검색 유형
@@ -118,7 +122,7 @@ public class JdbcArticleDao implements ArticleDao {
             }
         }
         sql.append(" ))")
-           .append(" WHERE request_page = ?");
+                .append(" WHERE request_page = ?");
         Connection con = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -168,6 +172,7 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 검색
+     *
      * @param type
      * @param value
      * @return
@@ -233,6 +238,7 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 게시글 읽기
+     *
      * @param articleNum
      * @param boardNum
      * @return
@@ -276,6 +282,7 @@ public class JdbcArticleDao implements ArticleDao {
 
     /**
      * 조회수 증가
+     *
      * @param articleNum
      * @param boardNum
      * @throws SQLException
@@ -304,36 +311,69 @@ public class JdbcArticleDao implements ArticleDao {
     }
 
     /**
+     * 댓글 출력
+     *
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<ArticleComment> commentListAll() throws SQLException {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT comment_num, comment_content, comment_date, article_num, user_id")
+                .append(" FROM ARTICLE_COMMENT");
+        Connection con = connectionFactory.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<ArticleComment> acList = new ArrayList<>();
+        try {
+            pstmt = con.prepareStatement(sql.toString());
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                ArticleComment articleComment = new ArticleComment();
+                articleComment.setCommentNum(rs.getInt("comment_num"));
+                articleComment.setCommentContent(rs.getString("comment_content"));
+                articleComment.setCommentDate(rs.getString("comment_date"));
+                articleComment.setArticleNum(rs.getInt("article_num"));
+                articleComment.setUserId(rs.getString("user_id"));
+                acList.add(articleComment);
+            }
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return acList;
+    }
+
+    /**
      * 댓글 등록
      */
-//    public void createReply(Article article) throws SQLException {
-//        StringBuilder sql = new StringBuilder();
-//        sql.append(" INSERT INTO article(article_id,board_id,writer,title,content,passwd,group_no,level_no,order_no)")
-//                .append(" VALUES(article_id_seq.NEXTVAL,?,?,?,?,?,?,?+1,")
-//                .append(" (SELECT MAX(order_no) + 1 FROM   article WHERE  board_id = 10 AND group_no = ?))");
-//        Connection con = connectionFactory.getConnection();
-//        PreparedStatement pstmt = null;
-//        try {
-//            pstmt = con.prepareStatement(sql.toString());
-//
-//            pstmt.setInt(1, article.getBoardId());
-//            pstmt.setString(2, article.getWriter());
-//            pstmt.setString(3, article.getTitle());
-//            pstmt.setString(4, article.getContent());
-//            pstmt.setString(5, article.getPasswd());
-//            pstmt.setInt(6, article.getGroupNo());
-//            pstmt.setInt(7, article.getLevelNo());
-//            pstmt.setInt(8, article.getGroupNo());
-//            pstmt.executeUpdate();
-//        } finally {
-//            try {
-//                if (pstmt != null) pstmt.close();
-//                if (con != null) con.close();
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
+    public void createReply(ArticleComment articleComment) throws SQLException {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" INSERT INTO article_comment(COMMENT_NUM,COMMENT_CONTENT,COMMENT_DATE,ARTICLE_NUM,USER_ID)")
+                .append(" VALUES(comment_seq.nextval, ?, ?, ?, ?)");
+        Connection con = connectionFactory.getConnection();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement(sql.toString());
+            pstmt.setString(1, articleComment.getCommentContent());
+            pstmt.setString(2, articleComment.getCommentDate());
+            pstmt.setInt(3, articleComment.getArticleNum());
+            pstmt.setString(4, articleComment.getUserId());
+            pstmt.executeUpdate();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public static void main(String[] args) throws SQLException {
         JdbcArticleDao jdbcArticleDao = new JdbcArticleDao();
 //        List<Article> test = jdbcArticleDao.findBydAll(10,1,null,null);

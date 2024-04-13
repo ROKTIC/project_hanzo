@@ -1,6 +1,7 @@
 package com.ezen.board.dao;
 
 import com.ezen.board.dto.Article;
+import com.ezen.board.dto.ArticleComment;
 import com.ezen.board.dto.Board;
 
 import java.sql.SQLException;
@@ -20,4 +21,6 @@ public interface ArticleDao {
 //    public void createReply(Article article) throws SQLException;
 
     public void updateArticleHitCount(int boardNum, int articleNum) throws SQLException;
+
+    public List<ArticleComment> commentListAll() throws SQLException;
 }
