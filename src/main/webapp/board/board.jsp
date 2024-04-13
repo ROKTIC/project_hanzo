@@ -5,7 +5,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.ezen.mall.web.common.page.PageParams" %>
 <%@ page import="com.ezen.board.dao.JdbcArticleDao" %>
-<%@ page import="java.util.ArrayList" %>
 <%--
     일상 게시판
  --%>
@@ -32,6 +31,7 @@
     BoardService boardService = new BoardServiceImpl();
     List<Article> list = boardService.articleList(rowCount, boardNum, requestPage, searchType, searchValue);
     request.setAttribute("list", list);
+
 
     int tableRowCount = boardService.getArticleCount(boardNum, searchType, searchValue);
     PageParams params = new PageParams(rowCount, pageSize, requestPage, tableRowCount);
@@ -97,12 +97,13 @@
                 <div class="container">
                     <div class="search-window">
                         <div class="search-wrap">
+
                             <select class="search-type">
-                                <option selected value="all">-검색-</option>
-                                <option value="t">제목</option>
-                                <option value="w">작성자</option>
+                                <option selected value="all" <%="".equals(searchType) ? "selected" : ""%>>-검색-</option>
+                                <option value="t" <%="t".equals(searchType) ? "selected" : ""%>>제목</option>
+                                <option value="w" <%="w".equals(searchType) ? "selected" : ""%>>작성자</option>
                             </select>
-                            <input placeholder="검색어를 입력해주세요." class="search-text">
+                            <input placeholder="검색어를 입력해주세요." class="search-text" value="<%=searchValue == null ? "" : searchValue%>">
                             <button class="search-btn">검색</button>
                         </div>
                     </div>
@@ -147,32 +148,32 @@
                     <div class="page">
                         <ul class="pagination modal">
                             <c:if test="${pagination.showFirst}">
-                                <li class="page-item"><a class="page-link"
-                                                         href="?page=1&type=${param.type}&value=${param.value}">처음</a>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1&searchType=${param.searchType}&searchText=${param.searchText}">처음</a>
                                 </li>
                             </c:if>
                             <c:if test="${pagination.showPrevious}">
-                                <li class="page-item"><a class="page-link"
-                                                         href="?page=${pagination.previousStartPage}&type=${param.type}&value=${param.value}">이전</a>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=${pagination.previousStartPage}&searchType=${param.searchType}&searchText=${param.searchText}">이전</a>
                                 </li>
                             </c:if>
                             <c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}">
                                 <c:url var="list" value="board.jsp" scope="request">
                                     <c:param name="page" value="${i}"/>
-                                    <c:param name="type" value="${param.type}"/>
-                                    <c:param name="value" value="${param.value}"/>
+                                    <c:param name="searchType" value="${param.searchType}"/>
+                                    <c:param name="searchText" value="${param.searchText}"/>
                                 </c:url>
                                 <li class="page-item <c:if test="${i == pagination.params.requestPage}">active</c:if>">
                                     <a class="page-link" href="${list}">${i}</a></li>
                             </c:forEach>
                             <c:if test="${pagination.showNext}">
                                 <li class="page-item"><a class="page-link"
-                                                         href="?page=${pagination.nextStartPage}&type=${param.type}&value=${param.value}">다음</a>
+                                                         href="?page=${pagination.nextStartPage}&searchType=${param.searchType}&searchText=${param.searchText}">다음</a>
                                 </li>
                             </c:if>
                             <c:if test="${pagination.showLast}">
                                 <li class="page-item"><a class="page-link"
-                                                         href="?page=${pagination.totalPages}&type=${param.type}&value=${param.value}">끝</a>
+                                                         href="?page=${pagination.totalPages}&searchType=${param.searchType}&searchText=${param.searchText}">끝</a>
                                 </li>
                             </c:if>
                         </ul>
@@ -193,7 +194,11 @@
         let searchType = document.querySelector('.search-type');
         console.log(searchType.value);
         if (searchText.value != "") {
-            window.location.href = "searchBoard.jsp?searchType=" + searchType.value + "&searchText=" + searchText.value;
+            window.location.href = "board.jsp?searchType=" + searchType.value + "&searchText=" + searchText.value;
+        }
+        else
+        {
+            window.location.href = "board.jsp";
         }
     })
 </script>

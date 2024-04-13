@@ -108,7 +108,7 @@ section.notice {
     font-size: 14px;
     padding: 7px 14px;
     border: 1px solid #ccc;
-    width: 190px;
+    width: 200px;
     margin-left: 10px;
 }
 
@@ -118,7 +118,7 @@ section.notice {
     border-width: 1px;
 }
 
-#board-search .search-window .search-wrap .btn {
+#board-search .search-window .search-wrap .search-btn {
     position: absolute;
     right: 0;
     top: 0;
@@ -195,7 +195,7 @@ section.notice {
     font-size: 15px;
 }
 
-#type {
+#search-type {
     margin-left: 18px;
     height: 90%;
     font-size: 14px;

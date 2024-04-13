@@ -33,6 +33,7 @@
     else{
         System.out.println("11233");
     }
+
     pageContext.setAttribute("acList", acList);
     ac.setCommentContent(articleCommentContent); // 삭제
     ac.setUserId("hanzo1"); // 삭제
@@ -79,7 +80,7 @@
                         <p>${article.articleContent}</p>
                     </div>
                     <div class="blog-share-reply">
-                        <p>댓글 3</p>
+                        <p>댓글(?)</p>
                     </div>
                     <div class="reply-table">
                         <c:if test="${not empty acList}">

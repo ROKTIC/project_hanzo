@@ -29,10 +29,13 @@
     String searchType = request.getParameter("searchType");
     String searchValue = request.getParameter("searchText");
 
+    // 검색한 글 목록
     BoardService boardService = new BoardServiceImpl();
-    List<Article> list = boardService.articleList(rowCount, boardNum, requestPage, searchType, searchValue);
+    JdbcArticleDao jdao = new JdbcArticleDao();
+    List<Article> list = jdao.findByArticle(rowCount, boardNum, requestPage, searchType, searchValue);
     request.setAttribute("list", list);
 
+    // 페이징 처리 위한 검색한 글 전체 갯수
     int tableRowCount = boardService.getArticleCount(boardNum, searchType, searchValue);
     PageParams params = new PageParams(rowCount, pageSize, requestPage, tableRowCount);
     Pagination pagination = new Pagination(params);
@@ -42,7 +45,6 @@
     String writeContent = request.getParameter("writeContent");
 
     Article ac = new Article();
-    JdbcArticleDao jdao = new JdbcArticleDao();
     if (request.getParameter("writeTitle") != null) {
         ac.setArticleTitle(writeTitle);
         ac.setArticleContent(writeContent);
@@ -97,10 +99,12 @@
                 <div class="container">
                     <div class="search-window">
                         <div class="search-wrap">
+                            <%=searchType%>
+                            <%=searchValue%>
                             <select class="search-type">
-                                <option selected value="all">-검색-</option>
-                                <option value="t">제목</option>
-                                <option value="w">작성자</option>
+                                <option selected value="all" <%=searchType=="" ? "selected" : ""%>>-검색-</option>
+                                <option value="t" <%=searchType=="t" ? "selected" : ""%>>제목</option>
+                                <option value="w" <%=searchType=="w" ? "selected" : ""%>>>작성자</option>
                             </select>
                             <input placeholder="검색어를 입력해주세요." class="search-text">
                             <button class="search-btn">검색</button>
@@ -157,7 +161,7 @@
                                 </li>
                             </c:if>
                             <c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}">
-                                <c:url var="list" value="board.jsp" scope="request">
+                                <c:url var="list" value="searchBoard.jsp" scope="request">
                                     <c:param name="page" value="${i}"/>
                                     <c:param name="type" value="${param.type}"/>
                                     <c:param name="value" value="${param.value}"/>
@@ -193,7 +197,7 @@
         let searchType = document.querySelector('.search-type');
         console.log(searchText.value);
         if (searchText.value != "") {
-            window.location.href = "board.jsp?searchType=" + searchType.value + "&searchText=" + searchText.value;
+            window.location.href = "searchBoard.jsp?searchType=" + searchType.value + "&searchText=" + searchText.value;
         }
     })
 </script>
