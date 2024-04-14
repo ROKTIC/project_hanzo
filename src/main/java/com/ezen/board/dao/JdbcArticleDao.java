@@ -96,7 +96,6 @@ public class JdbcArticleDao implements ArticleDao {
      * @return 검색 목록
      * @throws SQLException
      */
-    //ctrl + shift + u
     public List<Article> findByAll(int rowCount, int boardNum, int requestPage, String type, String value) throws SQLException {
         List<Article> list = new ArrayList<>();
         if (type != null && type.equals("")) {
@@ -453,15 +452,14 @@ public class JdbcArticleDao implements ArticleDao {
     public void createReply(ArticleComment articleComment) throws SQLException {
         StringBuilder sql = new StringBuilder();
         sql.append(" INSERT INTO article_comment(COMMENT_NUM,COMMENT_CONTENT,COMMENT_DATE,ARTICLE_NUM,USER_ID)")
-                .append(" VALUES(comment_seq.nextval, ?, ?, ?, ?)");
+                .append(" VALUES(comment_seq.nextval, ?, sysdate, ?, ?)");
         Connection con = connectionFactory.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(sql.toString());
             pstmt.setString(1, articleComment.getCommentContent());
-            pstmt.setString(2, articleComment.getCommentDate());
-            pstmt.setInt(3, articleComment.getArticleNum());
-            pstmt.setString(4, articleComment.getUserId());
+            pstmt.setInt(2, articleComment.getArticleNum());
+            pstmt.setString(3, articleComment.getUserId());
             pstmt.executeUpdate();
         } finally {
             try {

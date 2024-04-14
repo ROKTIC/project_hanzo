@@ -4,7 +4,7 @@ SELECT board_num, article_num, ARTICLE_TITLE, USER_ID, ARTICLE_DATE, HITCOUNT
 
 
 SELECT B.board_num, B.article_num, B.article_title, B.user_id, B.article_date, B.hitcount
-      ,(SELECT COUNT(*) FROM article_comment A WHERE A.ARTICLE_NUM = B.article_num) -- 스칼라 서브쿼리 
+      ,(SELECT COUNT(*) FROM article_comment A WHERE A.ARTICLE_NUM = B.article_num) -- 스칼라 서브쿼리
 FROM (SELECT board_num, article_num, CEIL(rownum / 10) request_page, article_title, user_id, TO_CHAR(article_date, 'YYYY-MM-DD HH24:MI') article_date, hitcount 
       FROM (SELECT board_num, article_num, ARTICLE_TITLE, USER_ID, ARTICLE_DATE, HITCOUNT       
       FROM article

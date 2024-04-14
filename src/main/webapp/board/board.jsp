@@ -5,6 +5,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.ezen.mall.web.common.page.PageParams" %>
 <%@ page import="com.ezen.board.dao.JdbcArticleDao" %>
+<%@ page import="com.ezen.mall.web.common.encription.EzenUtil" %>
 <%--
     일상 게시판
  --%>
@@ -25,6 +26,17 @@
     }
 
     int pageSize = 10;
+
+    Cookie[] cookie = request.getCookies();
+    String userId = new String();
+    for (int i = 0; i < cookie.length; i++) {
+        if (cookie[i].getName().equals("saveId")) {
+            userId = EzenUtil.decryption(cookie[i].getValue());
+            System.out.println(userId);
+            break;
+        }
+    }
+
     String searchType = request.getParameter("searchType");
     String searchValue = request.getParameter("searchText");
 
@@ -46,7 +58,7 @@
         ac.setArticleTitle(writeTitle);
         ac.setArticleContent(writeContent);
         ac.setHitcount(0);
-        ac.setUserId(ac.getUserId());
+        ac.setUserId(userId);
         ac.setBoardNum(boardNum);
         jdao.createArticle(ac);
     }

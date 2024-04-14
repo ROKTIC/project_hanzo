@@ -4,7 +4,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.ezen.board.dao.JdbcArticleDao" %>
 <%@ page import="com.ezen.mall.web.common.page.Pagination" %>
-<%@ page import="com.ezen.mall.web.common.page.PageParams" %><%--게시글 읽기 --%>
+<%@ page import="com.ezen.mall.web.common.page.PageParams" %>
+<%@ page import="com.ezen.mall.web.common.encription.EzenUtil" %><%--게시글 읽기 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<c:if test="${empty loginMember}">--%>
@@ -27,6 +28,16 @@
     }
 
     int pageSize = 10;
+
+    Cookie[] cookie = request.getCookies();
+    String userId = new String();
+    for (int i = 0; i < cookie.length; i++) {
+        if (cookie[i].getName().equals("saveId")) {
+            userId = EzenUtil.decryption(cookie[i].getValue());
+            System.out.println(userId);
+            break;
+        }
+    }
     String searchType = request.getParameter("searchType");
     String searchValue = request.getParameter("searchText");
 
@@ -48,7 +59,7 @@
         ac.setArticleTitle(writeTitle);
         ac.setArticleContent(writeContent);
         ac.setHitcount(0);
-        ac.setUserId(ac.getUserId());
+        ac.setUserId(userId);
         ac.setBoardNum(boardNum);
         jdao.createArticle(ac);
     }
@@ -82,7 +93,7 @@
             border: 0px;
         }
 
-        .blog-content input.write-text {
+        .blog-content input.write-content {
             padding: 0px;
             border: 0px;
             width: 700px;
@@ -109,17 +120,19 @@
                     <input class="write-title"></input>
                 </div>
                 <div class="blog-profile">
-                    <div class="blog-profile_text" readonly>
-                        <h4 class="write-id">닉네임${acrticle.userId}</h4>
+                    <div class="blog-profile_text" value="${LoginMember.name}" readonly>
+                        <tr>
+                            <td>${LoginMember.name}</td>
+                        </tr>
                     </div>
                 </div>
                 <div class="blog-left">
                     <div class="blog-content">
-                        <input class="write-text" name="article_content"></input>
+                        <input class="write-content" name="article_content"></input>
                     </div>
                 </div>
                 <div class="write-add">
-                    <input class="write-content"></input>
+                    <%--                    <input class="write-content"></input>--%>
                     <button class="write-btn">작성</button>
                 </div>
             </div>

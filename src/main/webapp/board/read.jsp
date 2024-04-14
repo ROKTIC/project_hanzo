@@ -4,7 +4,8 @@
 <%@ page import="com.ezen.board.dto.ArticleComment" %>
 <%@ page import="com.ezen.board.dao.JdbcArticleDao" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %><%--게시글 읽기 --%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.ezen.mall.web.common.encription.EzenUtil" %><%--게시글 읽기 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<jsp:useBean id="acList" class="com.ezen.board.dto.ArticleComment" scope="page"/>--%>
@@ -13,36 +14,33 @@
 <%--    <jsp:forward page="/member/login.jsp"/>--%>
 <%--</c:if>--%>
 <%
+    Cookie[] cookie = request.getCookies();
+    String userId = new String();
+    for (int i = 0; i < cookie.length; i++) {
+        if (cookie[i].getName().equals("saveId")) {
+            userId = EzenUtil.decryption(cookie[i].getValue());
+            System.out.println(userId);
+            break;
+        }
+    }
+
     String articleNum = request.getParameter("articleNum");
     String boardNum = request.getParameter("boardNum");
+
+    System.out.println(articleNum);
+    System.out.println(boardNum);
 
     BoardService boardService = new BoardServiceImpl();
     Article article = boardService.getReadArticle(Integer.parseInt(articleNum), Integer.parseInt(boardNum));
 
     request.setAttribute("article", article);
-    String articleCommentContent = request.getParameter("replyInput");
 
     JdbcArticleDao jdao = new JdbcArticleDao();
-    ArticleComment ac = new ArticleComment();
 
     int an = jdao.findByReplyCount(Integer.parseInt(articleNum));
     List<ArticleComment> acList = jdao.commentListAll(articleNum);
-    if(acList.size() != 0){
-//            System.out.println(acList.get(1));
-    }
-    else{
-//        System.out.println("11233");
-    }
-
     pageContext.setAttribute("acList", acList);
-    ac.setCommentContent(articleCommentContent); // 건들필요 없음
-    ac.setUserId("hanzo1"); //  로그인 관련 대체 해야 할 부분
-    ac.setArticleNum(Integer.parseInt(articleNum)); // 건들필요 없음
-    ac.setCommentNum(1); // 나중에 seq 만들어서 대체 해야할 부분
-    ac.setCommentDate("202404-13"); //  sysdate 로 대체 해야할 부분
-    if(articleCommentContent != null){
-        jdao.createReply(ac);
-    }
+
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -114,10 +112,9 @@
         let replyInput = document.querySelector('.reply-input');
         console.log(replyInput.value);
         if(replyInput.value != ""){
-            window.location.href = "read.jsp?boardNum=${article.boardNum}&articleNum=${article.articleNum}&replyInput="+replyInput.value;
+            window.location.href = "read-action.jsp?boardNum=${article.boardNum}&articleNum=${article.articleNum}&replyInput="+replyInput.value;
         }
     })
 </script>
-
 </body>
 </html>
