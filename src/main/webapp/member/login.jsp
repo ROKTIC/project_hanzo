@@ -6,6 +6,7 @@
 
 <%
 	String referer = request.getParameter("referer");
+	session.invalidate();
 
 %>
 <!doctype html>

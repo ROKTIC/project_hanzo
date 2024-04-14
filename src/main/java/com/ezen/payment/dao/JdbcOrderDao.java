@@ -1,15 +1,9 @@
 package com.ezen.payment.dao;
 
-import com.ezen.board.dto.Board;
 import com.ezen.mall.domain.common.database.ConnectionFactory;
 import com.ezen.payment.dto.Order;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JdbcOrderDao implements OrderDao{
 

@@ -1,6 +1,8 @@
 <%@ page import="com.ezen.member.service.MemberService" %>
 <%@ page import="com.ezen.member.dto.Member" %>
 <%@ page import="com.ezen.mall.web.common.encription.EzenUtil" %>
+<%@ page import="com.ezen.member.dto.Order" %>
+<%@ page import="java.util.List" %>
 
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 
@@ -19,6 +21,7 @@
 
     MemberService memberService = new MemberService();
     Member loginMember = memberService.login(id, passwd);
+
     if (loginMember != null) {
         if (saveId != null) {
             Cookie saveIdCookie = new Cookie("saveId", EzenUtil.encription(id));
@@ -38,8 +41,18 @@
             }
         }
         session.setAttribute("loginMember", loginMember);
+
+        List<Order> orderList = memberService.getOrderListForMember(id);
+        session.setAttribute("orderList", orderList);
+
         response.sendRedirect(referer);
-//        response.sendRedirect("../index.jsp");
+        System.out.println("-------로그인멤버------");
+        System.out.println(loginMember);
+        System.out.println("-------로그인멤버------");
+        System.out.println("-------오더리스트------");
+        System.out.println(orderList);
+        System.out.println("-------오더리스트------");
+
     } else {
 %>
 <script>

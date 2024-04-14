@@ -128,6 +128,11 @@ section.notice {
     font-size: 15px;
 }
 
+.search-window .search-wrap .search-btn {
+    width: 100px;
+    height: 40px;
+}
+
 .board-table {
     font-size: 13px;
     width: 100%;

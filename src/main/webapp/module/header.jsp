@@ -22,7 +22,7 @@
     <%--    <h2><a href="../member/memberpage.jsp"><i class="fa-solid fa-user"></i></a></h2>--%>
     <h2><a href="../cart/cart.jsp"><i class="fa-solid fa-cart-shopping"></i></a></h2>
     <h2><a href="../board/announcement.jsp">공지사항</a></h2>
-    <h2><a href="../board/qna.jsp">Q & A</a></h2>
+    <h2><a href="../board/qna2.jsp">Q & A</a></h2>
 </div>
 <header>
 
